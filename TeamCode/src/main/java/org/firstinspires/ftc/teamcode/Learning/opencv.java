@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Learning;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -27,12 +29,13 @@ public class opencv extends LinearOpMode {
     double cX = 0;
     double cY = 0;
     double width = 0;
+
     private OpenCvCamera controlHubCam;  // Use OpenCvCamera class from FTC SDK
-    private static final int CAMERA_WIDTH = 640; // width  of wanted camera resolution
-    private static final int CAMERA_HEIGHT = 360; // height of wanted camera resolution
+    private static final int CAMERA_WIDTH = 1280; // width  of wanted camera resolution
+    private static final int CAMERA_HEIGHT = 800; // height of wanted camera resolution
 
     // Calculate the distance using the formula
-    public static final double objectWidthInRealWorldUnits = 3.75;  // Replace with the actual width of the object in real-world units
+    public static final double objectWidthInRealWorldUnits = 8.7;  // Replace with the actual width of the object in real-world units
     public static final double focalLength = 728;  // Replace with the focal length of the camera in pixels
 
 
@@ -40,6 +43,11 @@ public class opencv extends LinearOpMode {
     public void runOpMode() {
 
         initOpenCV();
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+        FtcDashboard.getInstance().startCameraStream(controlHubCam, 30);
+
+
         waitForStart();
 
         while (opModeIsActive()) {
