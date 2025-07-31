@@ -6,7 +6,6 @@ public class TurretAngelCalculate {
     double distanceCalc(double point1x, double point1y, double point2x, double point2y) {
         return Math.sqrt(Math.pow(point2x - point1x, 2) + Math.pow((point2y - point1y), 2));
     }
-
     double angelCalc(double centerX, double centerY, double forwardX, double forwardY, double targetX, double targetY) {
         double k0 = (centerY - forwardY) - (centerX - forwardX);
         double b0 = centerY - k0 * centerX;

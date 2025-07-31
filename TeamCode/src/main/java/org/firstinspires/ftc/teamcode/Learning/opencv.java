@@ -1,10 +1,14 @@
 package org.firstinspires.ftc.teamcode.Learning;
 
+import android.annotation.SuppressLint;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -61,21 +65,28 @@ public class opencv extends LinearOpMode {
         // Release resources
         controlHubCam.stopStreaming();
     }
-
     private void initOpenCV() {
 
         // Create an instance of the camera
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+        @SuppressLint("DiscouragedApi") int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
         // Use OpenCvCameraFactory class from FTC SDK to create camera instance
         controlHubCam = OpenCvCameraFactory.getInstance().createWebcam(
-                hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+                hardwareMap.get(WebcamName.class, "cam"), cameraMonitorViewId);
 
         controlHubCam.setPipeline(new YellowBlobDetectionPipeline());
+        controlHubCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                controlHubCam.startStreaming(CAMERA_WIDTH, CAMERA_HEIGHT, OpenCvCameraRotation.UPRIGHT);
+            }
 
-        controlHubCam.openCameraDevice();
-        controlHubCam.startStreaming(CAMERA_WIDTH, CAMERA_HEIGHT, OpenCvCameraRotation.UPRIGHT);
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
     }
     class YellowBlobDetectionPipeline extends OpenCvPipeline {
         @Override
